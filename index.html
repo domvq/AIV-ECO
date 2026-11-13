@@ -6107,6 +6107,25 @@ try{ if(S.user && S.profile && (!S.chat || !(S.chat.messages || []).length) && !
 })();
 })();
 </script>
+<script>
+/* Questions sent from aiverse.it.com (aiv-eco.com/?q=...) wait in the chat box, ready to send */
+(function(){
+  var q; try{ q=new URLSearchParams(location.search).get('q'); }catch(e){}
+  if(!q) return;
+  q=String(q).slice(0,4000);
+  try{ var u=new URL(location.href); u.searchParams.delete('q'); history.replaceState(null,'',u.pathname+(u.search||'')+u.hash); }catch(e){}
+  var done=false;
+  function place(){
+    if(done) return true;
+    var el=document.getElementById('input'), auth=document.getElementById('auth');
+    if(!el || (auth && !auth.classList.contains('hidden'))) return false;
+    if(!el.value.trim()){ el.value=q; el.dispatchEvent(new Event('input',{bubbles:true})); }
+    try{ el.focus(); el.setSelectionRange(el.value.length, el.value.length); }catch(e){}
+    done=true; return true;
+  }
+  function start(){ if(place()) return; var n=0, t=setInterval(function(){ if(place() || ++n>600) clearInterval(t); }, 500); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(start,300); }); else setTimeout(start,300);
+})();
+</script>
 </body>
 </html>
-google-site-verification: google9bbca2da35538c8a.html
