@@ -47,3 +47,23 @@ It stops with a message if a part of AIV X it needs to change has moved. All Eco
 - Guests keep the 10-message limit, with or without their own key. Guests no longer tick the 18+ and
   Terms box; they agree through the line under the message box. Sign-up still requires the box.
 - "Create an app" (apps, games, websites) is still in the + menu; only the AI builder was removed.
+
+## Search pages (SEO)
+
+Like AIV X, AIV Eco has marketing pages that aren't linked from the app. Search engines find them through
+the sitemap. They live in the `eco` folder next to the app:
+
+- `explore.html`: hub page
+- `eco-friendly-ai.html`: the eco-friendly AI assistant that uses less water
+- `ai-water-usage.html`: how much water AI uses, with sources
+- `green-ai-solutions.html`: green and sustainable AI solutions
+- `ai-environmental-impact-tracker.html`: the energy and water tracker
+- `chatgpt-claude-gemini-with-less-water.html`: bring your own ChatGPT, Claude, Gemini or Groq key
+- `og-image.png`: share image used when a page is posted on social media
+- `seo.css`: their styling
+
+`root/sitemap.xml` is AIV X's sitemap with the Eco pages added. It replaces the sitemap.xml at the top of
+the AIV X repo (not inside `eco`). The app page itself now has Eco's own title, description, address,
+share image and search-engine data.
+
+To change the wording, edit `builder/seo/gen.py` and run `python3 builder/seo/gen.py eco`.

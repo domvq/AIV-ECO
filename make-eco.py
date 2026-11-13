@@ -25,8 +25,8 @@ def sub(pat, b, n=1, flags=0, head=False):
     s = part + s[cut:]
 
 # ---- head: Eco title and description; drop AIV X's canonical address, app manifest and search-engine data
-TITLE = "AIV Eco: The AI Assistant Built to Use Less"
-DESC = "AIV Eco is the AI assistant built to use less. Your favorite AI models with less water and energy consumption, with an estimate on every answer."
+TITLE = "AIV Eco: The Eco-Friendly AI That Uses Less Water"
+DESC = "Worried about AI water usage? AIV Eco is the AI that uses less water and energy, better for the environment. Free to use, no sign-up needed."
 sub(r"<title>.*?</title>", f"<title>{TITLE}</title>", head=True)
 sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{DESC}">', head=True)
 sub(r'<link rel="canonical"[^>]*>\n', "", head=True)
@@ -38,6 +38,17 @@ sub(r'<meta name="twitter:title" content="[^"]*">', f'<meta name="twitter:title"
 sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{DESC}">', head=True)
 sub(r'<meta name="twitter:description" content="[^"]*">', f'<meta name="twitter:description" content="{DESC}">', head=True)
 sub(r'<meta property="og:image:alt" content="[^"]*">', '<meta property="og:image:alt" content="AIV Eco">', head=True)
+# Eco's own share image, address and search-engine description
+rep('<meta property="og:image" content="https://aiv-x.com/og-image.png">', '<meta property="og:image" content="https://aiv-x.com/eco/og-image.png">\n<meta property="og:url" content="https://aiv-x.com/eco/">\n<link rel="canonical" href="https://aiv-x.com/eco/">')
+rep('<meta name="twitter:image" content="https://aiv-x.com/og-image.png">', '<meta name="twitter:image" content="https://aiv-x.com/eco/og-image.png">')
+LD = {"@context":"https://schema.org","@graph":[
+  {"@type":"WebSite","@id":"https://aiv-x.com/eco/#site","url":"https://aiv-x.com/eco/","name":"AIV Eco","publisher":{"@type":"Organization","name":"AI Verse","url":"https://aiverse.it.com/"}},
+  {"@type":"WebApplication","@id":"https://aiv-x.com/eco/#app","name":"AIV Eco","url":"https://aiv-x.com/eco/","applicationCategory":"ProductivityApplication","operatingSystem":"Web browser","isAccessibleForFree":True,
+   "description":"AIV Eco is an eco-friendly AI assistant that uses less water and energy by skipping unnecessary AI work, and shows an estimated energy and water footprint on every answer.",
+   "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"AI Verse","url":"https://aiverse.it.com/"}}]}
+import json
+i = s.index("</title>") + len("</title>")
+s = s[:i] + '\n<script type="application/ld+json">' + json.dumps(LD) + '</script>' + s[i:]
 for f in ("favicon.ico", "icon.svg", "apple-touch-icon.png"):
     rep(f'href="{f}"', f'href="https://aiv-x.com/{f}"')
 s = s.replace('href="terms.html"', 'href="https://aiv-x.com/terms.html"').replace('href="privacy.html"', 'href="https://aiv-x.com/privacy.html"')
